@@ -97,7 +97,7 @@ namespace lolCleanLogs
                     string configdir = Path.Combine(dirPath, config);
                     if (Directory.Exists(configdir))
                     {
-                        Directory.Delete(configdir);
+                        Directory.Delete(configdir,true);
                         MessageBox.Show("Configs deleted!", "Success");
                         progressBar.Value = 75;
                     }
@@ -111,7 +111,7 @@ namespace lolCleanLogs
                 catch (Exception exception)
                 {
                     MessageBox.Show("For delete Config u need to close LoLClient.exe");
-                    Application.Exit();
+
                 }
 
 
@@ -121,7 +121,7 @@ namespace lolCleanLogs
                     string logsdir = Path.Combine(dirPath, logs);
                     if (Directory.Exists(logsdir))
                     {
-                        Directory.Delete(logsdir);
+                        Directory.Delete(logsdir,true);
                         MessageBox.Show("Logs deleted!", "Success");
                         progressBar.Value = 100;
                     }
