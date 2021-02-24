@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -20,17 +21,18 @@ namespace lolCleanLogs
         }
 
 
-
+        private string localRiotGames = Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
+        string riotGames = "Riot Games";
+        private string data;
         static readonly string ProgramData = @"C:\ProgramData\Riot Games";
-        private static readonly string Local = @"C:\Users\faruk\AppData\Local\RiotGames";
-        string temp = Environment.GetEnvironmentVariable("TEMP");
+        string temp = Environment.GetEnvironmentVariable("TEMP");   
         private string dirName;
         private string dirPath;
         private bool truePath;
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-
+            
             FolderBrowserDialog x = new FolderBrowserDialog();
             x.ShowDialog();
             dirPath = x.SelectedPath;
@@ -94,6 +96,8 @@ namespace lolCleanLogs
                     }
                 }
 
+                Thread.Sleep(1000);
+                //delete temp folder
                 try
                 {
                     if (Directory.Exists(temp))
@@ -102,7 +106,7 @@ namespace lolCleanLogs
                         MessageBox.Show("Temp logs deleted!", "Success");
                         progressBar.Value = 50;
                     }
-                    else if (!Directory.Exists(Local))
+                    else if (!Directory.Exists(temp))
                     {
                         MessageBox.Show("Temp not found!", "Error");
                         progressBar.Value = 50;
@@ -114,6 +118,7 @@ namespace lolCleanLogs
 
                 }
 
+                //delete program/data/riotgames machine.cfg 
                 try
                 {
                     string machine = "machine.cfg";
@@ -136,15 +141,17 @@ namespace lolCleanLogs
 
                 }
 
+                //delete appdata/local/riotgames folder
+                data = Path.Combine(localRiotGames, riotGames);
                 try
                 {
-                    if (Directory.Exists(Local))
+                    if (Directory.Exists(data))
                     {
-                        Directory.Delete(Local);
+                        Directory.Delete(data, true);
                         MessageBox.Show("Appdata logs deleted!", "Success");
                         progressBar.Value = 50;
                     }
-                    else if (!Directory.Exists(Local))
+                    else if (!Directory.Exists(data))
                     {
                         MessageBox.Show("Appdata/RiotGames not found!", "Success");
                         progressBar.Value = 50;
@@ -156,6 +163,7 @@ namespace lolCleanLogs
                 }
 
 
+                // delete lol config 
                 try
                 {
                     string config = "Config";
@@ -180,6 +188,7 @@ namespace lolCleanLogs
                 }
 
 
+                // delete lol logs
                 try
                 {
                     string logs = "Logs";
@@ -207,6 +216,7 @@ namespace lolCleanLogs
 
             }
 
+            // first need to select directory
             if (truePath == false)
             {
                 MessageBox.Show("Select a League of Legends directory!", "Error");
@@ -215,5 +225,6 @@ namespace lolCleanLogs
 
         }
 
+       
     }
 }
