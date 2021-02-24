@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -18,21 +19,25 @@ namespace lolCleanLogs
             InitializeComponent();
         }
 
-     
+
 
         static readonly string ProgramData = @"C:\ProgramData\Riot Games";
         private static readonly string Local = @"C:\Users\faruk\AppData\Local\RiotGames";
+        string temp = Environment.GetEnvironmentVariable("TEMP");
         private string dirName;
         private string dirPath;
         private bool truePath;
+
         private void button1_Click_1(object sender, EventArgs e)
         {
+
             FolderBrowserDialog x = new FolderBrowserDialog();
             x.ShowDialog();
             dirPath = x.SelectedPath;
-            
 
-            if (x.SelectedPath.Contains("Riot Games\\League of Legends") || x.SelectedPath.Contains("Riot Games\\lol") || x.SelectedPath.Contains("League of Legends") || x.SelectedPath.Contains("lol"))
+            if (x.SelectedPath.Contains("Riot Games\\League of Legends") ||
+                x.SelectedPath.Contains("Riot Games\\lol") || x.SelectedPath.Contains("League of Legends") ||
+                x.SelectedPath.Contains("lol"))
             {
                 MessageBox.Show("True directory", "Success");
                 truePath = true;
@@ -47,8 +52,68 @@ namespace lolCleanLogs
 
         private void cleanBtn_Click_1(object sender, EventArgs e)
         {
+            // if league of legends path true
             if (truePath == true)
             {
+                //close lol game
+                string lolGame = "League of Legends";
+                Process[] processX = Process.GetProcessesByName(lolGame);
+
+                foreach (Process prs in processX)
+                {
+                    if (prs.ProcessName == lolGame)
+                    {
+                        prs.Kill();
+                        break;
+                    }
+                }
+
+                //close lol client
+                string lol = "LeagueClient";
+                Process[] process = Process.GetProcessesByName(lol);
+
+                foreach (Process prs in process)
+                {
+                    if (prs.ProcessName == lol)
+                    {
+                        prs.Kill();
+                        break;
+                    }
+                }
+
+                // close lol login screen
+                string riotClient = "RiotClientServices";
+                Process[] riot = Process.GetProcessesByName(riotClient);
+
+                foreach (Process prs in riot)
+                {
+                    if (prs.ProcessName == riotClient)
+                    {
+                        prs.Kill();
+                        break;
+                    }
+                }
+
+                try
+                {
+                    if (Directory.Exists(temp))
+                    {
+                        Directory.Delete(temp, true);
+                        MessageBox.Show("Temp logs deleted!", "Success");
+                        progressBar.Value = 50;
+                    }
+                    else if (!Directory.Exists(Local))
+                    {
+                        MessageBox.Show("Temp not found!", "Error");
+                        progressBar.Value = 50;
+                    }
+                }
+                catch (Exception exception)
+                {
+
+
+                }
+
                 try
                 {
                     string machine = "machine.cfg";
@@ -97,7 +162,7 @@ namespace lolCleanLogs
                     string configdir = Path.Combine(dirPath, config);
                     if (Directory.Exists(configdir))
                     {
-                        Directory.Delete(configdir,true);
+                        Directory.Delete(configdir, true);
                         MessageBox.Show("Configs deleted!", "Success");
                         progressBar.Value = 75;
                     }
@@ -121,13 +186,13 @@ namespace lolCleanLogs
                     string logsdir = Path.Combine(dirPath, logs);
                     if (Directory.Exists(logsdir))
                     {
-                        Directory.Delete(logsdir,true);
+                        Directory.Delete(logsdir, true);
                         MessageBox.Show("Logs deleted!", "Success");
                         progressBar.Value = 100;
                     }
                     else if (!Directory.Exists(logsdir))
                     {
-                        MessageBox.Show("Logs not found!","Success");
+                        MessageBox.Show("Logs not found!", "Success");
                         progressBar.Value = 100;
                     }
 
@@ -144,10 +209,11 @@ namespace lolCleanLogs
 
             if (truePath == false)
             {
-                MessageBox.Show("Select a League of Legends directory!","Error");
+                MessageBox.Show("Select a League of Legends directory!", "Error");
             }
 
-           
+
         }
+
     }
 }
