@@ -110,7 +110,8 @@ namespace lolCleanLogs
                 }
                 catch (Exception exception)
                 {
-
+                    MessageBox.Show("For delete Config u need to close LoLClient.exe");
+                    Application.Exit();
                 }
 
 
@@ -133,16 +134,20 @@ namespace lolCleanLogs
                 }
                 catch (Exception exception)
                 {
-
+                    MessageBox.Show("For delete logs u need to close LoLClient.exe");
+                    Application.Exit();
                 }
 
-                MessageBox.Show("All logs has been deleted!", "Success");
+                MessageBox.Show("All logs successfuly deleted!");
+
             }
 
             if (truePath == false)
             {
                 MessageBox.Show("Select a League of Legends directory!","Error");
             }
+
+           
         }
     }
 }
